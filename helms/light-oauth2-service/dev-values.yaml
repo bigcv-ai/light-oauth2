@@ -1,0 +1,102 @@
+replicaCount: 1
+
+nameOverride: "light-oauth2-service"
+fullnameOverride: "light-oauth2-service"
+
+image:
+  pullPolicy: IfNotPresent
+  tag: "v1"
+
+imagePullSecrets: []
+
+service:
+  type: ClusterIP
+  port: 6883
+  containerPort: 6883
+
+healthCheck:
+  livenessProbe:
+    enable: false
+    httpGet:
+      path: /
+      port: http
+  readinessProbe:
+    enable: false
+    httpGet:
+      path: /
+      port: http
+
+configMap:
+  name: "light-oauth2-service-config"
+  enable: true
+  values:
+    # Server Configuration
+    SERVER_IP: "0.0.0.0"
+    SERVER_HTTP_PORT: "6883"
+    SERVER_ENABLE_HTTP: "false"
+    SERVER_HTTPS_PORT: "6883"
+    SERVER_ENABLE_HTTPS: "true"
+    SERVER_ENABLE_HTTP2: "true"
+    SERVER_KEYSTORE_NAME: "server.keystore"
+    SERVER_ENABLE_TWO_WAY_TLS: "false"
+    SERVER_TRUSTSTORE_NAME: "server.truststore"
+    SERVER_SERVICE_ID: "com.networknt.oauth2-service-1.0.0"
+    SERVER_ENABLE_REGISTRY: "false"
+    SERVER_DYNAMIC_PORT: "false"
+    SERVER_MIN_PORT: "2400"
+    SERVER_MAX_PORT: "2500"
+    SERVER_BUILD_NUMBER: "1.0.0"
+
+    # OpenAPI Security Configuration
+    OPENAPI_SECURITY_ENABLE_VERIFY_JWT: "false"
+    OPENAPI_SECURITY_ENABLE_VERIFY_SCOPE: "true"
+    OPENAPI_SECURITY_ENABLE_MOCK_JWT: "false"
+    OPENAPI_SECURITY_LOG_JWT_TOKEN: "true"
+    OPENAPI_SECURITY_LOG_CLIENT_USER_SCOPE: "false"
+    OPENAPI_SECURITY_ENABLE_JWT_CACHE: "true"
+    OPENAPI_SECURITY_BOOTSTRAP_FROM_KEY_SERVICE: "false"
+
+    # OpenAPI Validator Configuration
+    OPENAPI_VALIDATOR_ENABLED: "true"
+    OPENAPI_VALIDATOR_LOG_ERROR: "true"
+
+    # CORS Configuration
+    CORS_ENABLED: "true"
+    CORS_ALLOWED_ORIGINS: "http://localhost:8080"
+    CORS_ALLOWED_METHODS: "GET,POST,PUT,DELETE"
+
+    # OAuth Service Configuration
+    OAUTH_SERVICE_ENABLE_AUDIT: "false"
+
+    # Database Configuration
+    DB_JDBC_URL: "jdbc:mysql://mysqldb:3306/oauth2?useSSL=false&disableMariaDbDriver"
+    DB_MAX_POOL_SIZE: "2"
+    DB_USE_SERVER_PREP_STMTS: "true"
+    DB_CACHE_PREP_STMTS: "true"
+    DB_CACHE_CALLABLE_STMTS: "true"
+    DB_PREP_STMT_CACHE_SIZE: "4096"
+    DB_PREP_STMT_CACHE_SQL_LIMIT: "2048"
+
+secret:
+  name: "light-oauth2-service-secret"
+  enable: true
+  values:
+    # Server Secrets
+    SERVER_KEYSTORE_PASS: "cGFzc3dvcmQ="
+    SERVER_KEY_PASS: "cGFzc3dvcmQ="
+    SERVER_TRUSTSTORE_PASS: "cGFzc3dvcmQ="
+
+    # Database Secrets
+    DB_USERNAME: "bXlzcWV1c2Vy"
+    DB_PASSWORD: "bXlzcHlw"
+
+    # JWT Secrets
+    JWT_KEY_PASSWORD: "cGFzc3dvcmQ="
+
+    # Client Secrets
+    AUTHORIZATION_CODE_CLIENT_SECRET: "ZjZoMkZJOFMzLTdVU2NQWmRmWEFh"
+    CLIENT_CREDENTIALS_CLIENT_SECRET: "ZjZoMkZJOFMzLTdVU2NQWmRmWEFh"
+    KEY_CLIENT_SECRET: "ZjZoMkZJOFMzLTdVU2NQWmRmWEFh"
+
+    # Other Secrets
+    EMAIL_PASSWORD: "Y2hhbmdlLXRvLXJlYWwtcGFzc3dvcmQ="
