@@ -1,0 +1,156 @@
+replicaCount: 1
+
+nameOverride: "light-oauth2-token"
+fullnameOverride: "light-oauth2-token"
+
+image:
+  pullPolicy: IfNotPresent
+  tag: "v1"
+
+imagePullSecrets: []
+
+service:
+  type: ClusterIP
+  port: 6882
+  containerPort: 6882
+
+healthCheck:
+  livenessProbe:
+    enable: false
+    httpGet:
+      path: /
+      port: http
+  readinessProbe:
+    enable: false
+    httpGet:
+      path: /
+      port: http
+
+configMap:
+  name: "light-oauth2-token-config"
+  enable: true
+  values:
+    # Server Configuration
+    SERVER_IP: "0.0.0.0"
+    SERVER_HTTP_PORT: "6882"
+    SERVER_ENABLE_HTTP: "false"
+    SERVER_HTTPS_PORT: "6882"
+    SERVER_ENABLE_HTTPS: "true"
+    SERVER_ENABLE_HTTP2: "true"
+    SERVER_KEYSTORE_NAME: "server.keystore"
+    SERVER_ENABLE_TWO_WAY_TLS: "false"
+    SERVER_TRUSTSTORE_NAME: "server.truststore"
+    SERVER_SERVICE_ID: "com.networknt.oauth-token-1.0.0"
+    SERVER_ENABLE_REGISTRY: "false"
+    SERVER_DYNAMIC_PORT: "false"
+    SERVER_MIN_PORT: "2400"
+    SERVER_MAX_PORT: "2500"
+    SERVER_BUILD_NUMBER: "1.0.0"
+    SERVER_ENVIRONMENT: "dev"
+
+    # OpenAPI Security Configuration
+    OPENAPI_SECURITY_ENABLE_VERIFY_JWT: "false"
+    OPENAPI_SECURITY_ENABLE_EXTRACT_SCOPE_TOKEN: "true"
+    OPENAPI_SECURITY_ENABLE_VERIFY_SCOPE: "true"
+    OPENAPI_SECURITY_ENABLE_VERIFY_JWT_SCOPE_TOKEN: "true"
+    OPENAPI_SECURITY_ENABLE_MOCK_JWT: "false"
+    OPENAPI_SECURITY_LOG_JWT_TOKEN: "true"
+    OPENAPI_SECURITY_LOG_CLIENT_USER_SCOPE: "false"
+    OPENAPI_SECURITY_ENABLE_JWT_CACHE: "true"
+    OPENAPI_SECURITY_BOOTSTRAP_FROM_KEY_SERVICE: "false"
+
+    # OpenAPI Validator Configuration
+    OPENAPI_VALIDATOR_ENABLED: "true"
+    OPENAPI_VALIDATOR_LOG_ERROR: "true"
+
+    # CORS Configuration
+    CORS_ENABLED: "true"
+    CORS_ALLOWED_ORIGINS: "https://localhost:3000"
+    CORS_ALLOWED_METHODS: "GET,POST,PUT,DELETE"
+
+    # OAuth Token Configuration
+    OAUTH_TOKEN_ENABLE_AUDIT: "false"
+    OAUTH_TOKEN_BOOTSTRAP_CLIENT_ID: "f7d42348-c647-4efb-a52d-4c5787421e00"
+    OAUTH_TOKEN_BOOTSTRAP_SCOPE: "portal.w"
+
+    # JWT Configuration
+    JWT_KEY_KID: "100"
+    JWT_KEY_FILENAME: "primary.jks"
+    JWT_KEY_KEYNAME: "selfsigned"
+    JWT_ISSUER: "urn:com:networknt:oauth2:v1"
+    JWT_AUDIENCE: "urn:com.networknt"
+    JWT_EXPIRED_IN_MINUTES: "10"
+    JWT_VERSION: "1.0"
+
+    # Client Configuration
+    CLIENT_VERIFY_HOSTNAME: "false"
+    CLIENT_DEFAULT_GROUP_KEY: "trustedNames.local"
+    CLIENT_LOAD_TRUST_STORE: "true"
+    CLIENT_TRUST_STORE: "client.truststore"
+    CLIENT_LOAD_KEY_STORE: "false"
+    CLIENT_KEY_STORE: "client.keystore"
+    CLIENT_TOKEN_CACHE_CAPACITY: "200"
+    CLIENT_TOKEN_RENEW_BEFORE_EXPIRED: "60000"
+    CLIENT_EXPIRED_REFRESH_RETRY_DELAY: "2000"
+    CLIENT_EARLY_REFRESH_RETRY_DELAY: "4000"
+    CLIENT_TOKEN_SERVICE_ID: "com.networknt.oauth2-token-1.0.0"
+    CLIENT_TOKEN_ENABLE_HTTP2: "true"
+    CLIENT_TOKEN_AC_URI: "/oauth2/token"
+    CLIENT_TOKEN_AC_CLIENT_ID: "f7d42348-c647-4efb-a52d-4c5787421e73"
+    CLIENT_TOKEN_CC_URI: "/oauth2/token"
+    CLIENT_TOKEN_CC_CLIENT_ID: "f7d42348-c647-4efb-a52d-4c5787421e73"
+    CLIENT_TOKEN_RT_URI: "/oauth2/token"
+    CLIENT_TOKEN_RT_CLIENT_ID: "f7d42348-c647-4efb-a52d-4c5787421e73"
+    CLIENT_TOKEN_KEY_SERVICE_ID: "com.networknt.oauth2-key-1.0.0"
+    CLIENT_TOKEN_KEY_URI: "/oauth2/key"
+    CLIENT_TOKEN_KEY_CLIENT_ID: "f7d42348-c647-4efb-a52d-4c5787421e73"
+    CLIENT_TOKEN_KEY_ENABLE_HTTP2: "true"
+    CLIENT_SIGN_SERVICE_ID: "com.networknt.oauth2-token-1.0.0"
+    CLIENT_SIGN_URI: "/oauth2/token"
+    CLIENT_SIGN_TIMEOUT: "2000"
+    CLIENT_SIGN_ENABLE_HTTP2: "true"
+    CLIENT_SIGN_CLIENT_ID: "f7d42348-c647-4efb-a52d-4c5787421e73"
+    CLIENT_SIGN_KEY_SERVICE_ID: "com.networknt.oauth2-key-1.0.0"
+    CLIENT_SIGN_KEY_URI: "/oauth2/key"
+    CLIENT_SIGN_KEY_CLIENT_ID: "f7d42348-c647-4efb-a52d-4c5787421e73"
+    CLIENT_SIGN_KEY_ENABLE_HTTP2: "true"
+    CLIENT_DEREF_SERVICE_ID: "com.networknt.oauth2-token-1.0.0"
+    CLIENT_DEREF_ENABLE_HTTP2: "true"
+    CLIENT_DEREF_URI: "/oauth2/deref"
+    CLIENT_DEREF_CLIENT_ID: "f7d42348-c647-4efb-a52d-4c5787421e73"
+    CLIENT_ERROR_THRESHOLD: "2"
+    CLIENT_TIMEOUT: "3000"
+    CLIENT_RESET_TIMEOUT: "7000"
+    CLIENT_INJECT_OPEN_TRACING: "true"
+    CLIENT_ENABLE_HTTP2: "true"
+    CLIENT_CONNECTION_POOL_SIZE: "1000"
+    CLIENT_MAX_REQ_PER_CONN: "1000000"
+    CLIENT_MAX_CONNECTION_NUM_PER_HOST: "1000"
+    CLIENT_MIN_CONNECTION_NUM_PER_HOST: "250"
+
+secret:
+  name: "light-oauth2-token-secret"
+  enable: true
+  values:
+    # Server Secrets
+    SERVER_KEYSTORE_PASS: "cGFzc3dvcmQ="
+    SERVER_KEY_PASS: "cGFzc3dvcmQ="
+    SERVER_TRUSTSTORE_PASS: "cGFzc3dvcmQ="
+
+    # Client Secrets
+    CLIENT_TRUST_STORE_PASS: "cGFzc3dvcmQ="
+    CLIENT_KEY_STORE_PASS: "cGFzc3dvcmQ="
+    CLIENT_KEY_PASS: "cGFzc3dvcmQ="
+    CLIENT_TOKEN_AC_CLIENT_SECRET: "ZjZoMkZJOFMzLTdVU2NQWmRmWEFh"
+    CLIENT_TOKEN_CC_CLIENT_SECRET: "ZjZoMkZJOFMzLTdVU2NQWmRmWEFh"
+    CLIENT_TOKEN_RT_CLIENT_SECRET: "ZjZoMkZJOFMzLTdVU2NQWmRmWEFh"
+    CLIENT_TOKEN_KEY_CLIENT_SECRET: "ZjZoMkZJOFMzLTdVU2NQWmRmWEFh"
+    CLIENT_SIGN_CLIENT_SECRET: "ZjZoMkZJOFMzLTdVU2NQWmRmWEFh"
+    CLIENT_SIGN_KEY_CLIENT_SECRET: "ZjZoMkZJOFMzLTdVU2NQWmRmWEFh"
+    CLIENT_DEREF_CLIENT_SECRET: "ZjZoMkZJOFMzLTdVU2NQWmRmWEFh"
+
+    # JWT Secrets
+    JWT_KEY_PASSWORD: "cGFzc3dvcmQ="
+
+    # Other Secrets
+    EMAIL_PASSWORD: "Y2hhbmdlLXRvLXJlYWwtcGFzc3dvcmQ="

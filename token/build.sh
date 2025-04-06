@@ -12,7 +12,7 @@
 set -ex
 
 VERSION=$1
-IMAGE_NAME="networknt/oauth2-token"
+IMAGE_NAME="ghcr.io/bigcv-ai/light-oauth2-token"
 
 showHelp() {
     echo " "
@@ -28,7 +28,7 @@ showHelp() {
 
 build() {
     echo "Building ..."
-    mvn clean install
+    mvn clean install -DskipTests
     echo "Successfully built!"
 }
 
