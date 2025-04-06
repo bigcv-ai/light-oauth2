@@ -1,0 +1,129 @@
+replicaCount: 1
+
+nameOverride: "light-oauth2-code"
+fullnameOverride: "light-oauth2-code"
+
+image:
+  pullPolicy: IfNotPresent
+  tag: "v2"
+
+imagePullSecrets: []
+
+service:
+  type: ClusterIP
+  port: 6881
+  containerPort: 6881
+
+healthCheck:
+  livenessProbe:
+    enable: false
+    httpGet:
+      path: /
+      port: http
+  readinessProbe:
+    enable: false
+    httpGet:
+      path: /
+      port: http
+
+configMap:
+  name: light-oauth2-code-config
+  enable: true
+  values:
+    # Server Configuration
+    SERVER_IP: "0.0.0.0"
+    SERVER_HTTP_PORT: "6881"
+    SERVER_ENABLE_HTTP: "true"
+    SERVER_HTTPS_PORT: "6881"
+    SERVER_ENABLE_HTTPS: "true"
+    SERVER_ENABLE_HTTP2: "true"
+    SERVER_KEYSTORE_NAME: "server.keystore"
+    SERVER_ENABLE_TWO_WAY_TLS: "false"
+    SERVER_TRUSTSTORE_NAME: "server.truststore"
+    SERVER_SERVICE_ID: "com.networknt.oauth2-code-1.0.0"
+    SERVER_ENABLE_REGISTRY: "false"
+    SERVER_DYNAMIC_PORT: "false"
+    SERVER_MIN_PORT: "2400"
+    SERVER_MAX_PORT: "2500"
+    SERVER_BUILD_NUMBER: "1.0.0"
+
+    # Security Configuration
+    SECURITY_ENABLE_VERIFY_JWT: "false"
+    SECURITY_ENABLE_VERIFY_SCOPE: "true"
+    SECURITY_ENABLE_MOCK_JWT: "false"
+    SECURITY_JWT_CLOCK_SKEW_IN_SECONDS: "60"
+    SECURITY_LOG_JWT_TOKEN: "true"
+    SECURITY_LOG_CLIENT_USER_SCOPE: "false"
+    SECURITY_OAUTH_HTTP2_SUPPORT: "true"
+    SECURITY_ENABLE_JWT_CACHE: "true"
+
+    # JWT Configuration
+    JWT_KEY_KID: "100"
+    JWT_KEY_FILENAME: "primary.jks"
+    JWT_KEY_NAME: "selfsigned"
+    JWT_ISSUER: "urn:com:networknt:oauth2:v1"
+    JWT_AUDIENCE: "urn:com.networknt"
+    JWT_EXPIRED_IN_MINUTES: "10"
+    JWT_VERSION: "1.0"
+
+    # Database Configuration
+    DB_JDBC_URL: "jdbc:mysql://localhost:3306/oauth2?useSSL=false&disableMariaDbDriver"
+    DB_MAX_POOL_SIZE: "2"
+    DB_USE_SERVER_PREP_STMTS: "true"
+    DB_CACHE_PREP_STMTS: "true"
+    DB_CACHE_CALLABLE_STMTS: "true"
+    DB_PREP_STMT_CACHE_SIZE: "4096"
+    DB_PREP_STMT_CACHE_SQL_LIMIT: "2048"
+
+    # CORS Configuration
+    CORS_ENABLED: "true"
+    CORS_ALLOWED_ORIGINS: "http://localhost:8080"
+    CORS_ALLOWED_METHODS: "GET,POST,PUT,DELETE"
+
+    # LDAP Configuration
+    LDAP_URI: "ldaps://localhost:10636/ou=users,dc=undertow,dc=io"
+    LDAP_DOMAIN: "undertow.io"
+    LDAP_PRINCIPAL: "uid=oauth,ou=users,dc=undertow,dc=io"
+    LDAP_SEARCH_FILTER: "(&(uid=%s)(objectClass=person))"
+    LDAP_SEARCH_BASE: ""
+
+    # GitHub Configuration
+    GITHUB_PROTOCOL: "https"
+    GITHUB_HOST: "api.github.com"
+    GITHUB_PATH_PREFIX: ""
+    GITHUB_OWNER: "yourorg"
+    GITHUB_REPO: "marketplace-admin"
+    GITHUB_PATH: "users.json"
+
+    # SPNEGO Configuration
+    SPNEGO_DEBUG: "true"
+    SPNEGO_USE_KEYTAB: "false"
+    SPNEGO_KEYTAB: "/Users/stevehu/networknt/light-oauth2/code/src/test/resources/config/krb_oauth2code_poc-allenc.keytab"
+    SPNEGO_PRINCIPAL: "HTTP/localhost"
+
+secret:
+  name: light-oauth2-code-secret
+  enable: true
+  values:
+    # Server Secrets
+    SERVER_KEYSTORE_PASS: "cGFzc3dvcmQ="
+    SERVER_KEY_PASS: "cGFzc3dvcmQ="
+    SERVER_TRUSTSTORE_PASS: "cGFzc3dvcmQ="
+
+    # Database Secrets
+    DB_USERNAME: "bXlzcWV1c2Vy"
+    DB_PASSWORD: "bXlzcHlw"
+
+    # JWT Secrets
+    JWT_KEY_PASSWORD: "cGFzc3dvcmQ="
+
+    # Client Secrets
+    AUTHORIZATION_CODE_CLIENT_SECRET: "ZjZoMkZJOFMzLTdVU2NQWmRmWEFh"
+    CLIENT_CREDENTIALS_CLIENT_SECRET: "ZjZoMkZJOFMzLTdVU2NQWmRmWEFh"
+    KEY_CLIENT_SECRET: "ZjZoMkZJOFMzLTdVU2NQWmRmWEFh"
+
+    # Other Secrets
+    EMAIL_PASSWORD: "Y2hhbmdlLXRvLXJlYWwtcGFzc3dvcmQ="
+    LDAP_CREDENTIAL: "dGhlb2F1dGg="
+    GITHUB_TOKEN: "Z2l0aHViVG9rZW4="
+    SPNEGO_SERVICE_PASSWORD: "c2VydmljZXB3ZQ=="
