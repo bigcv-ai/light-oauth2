@@ -1,5 +1,5 @@
-uri: ldaps://localhost:10636/ou=users,dc=undertow,dc=io
-domain: undertow.io
-ldapPrincipal: uid=oauth,ou=users,dc=undertow,dc=io
-searchFilter: (&(uid=%s)(objectClass=person))
-searchBase: ''
+uri: ${LDAP_URI:ldaps://localhost:10636/ou=users,dc=undertow,dc=io}
+domain: ${LDAP_DOMAIN:undertow.io}
+ldapPrincipal: ${LDAP_PRINCIPAL:uid=oauth,ou=users,dc=undertow,dc=io}
+searchFilter: ${LDAP_SEARCH_FILTER:(&(uid=%s)(objectClass=person))}
+searchBase: ${LDAP_SEARCH_BASE:''}
