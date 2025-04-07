@@ -58,13 +58,12 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- if .Values.configMap.enable }}
           envFrom:
+          {{- if .Values.configMap.enable }}
             - configMapRef:
                 name: {{ .Values.configMap.name }}
           {{- end }}
           {{- if .Values.secret.enable }}
-          envFrom:
             - secretRef:
                 name: {{ .Values.secret.name }}
           {{- end }}
