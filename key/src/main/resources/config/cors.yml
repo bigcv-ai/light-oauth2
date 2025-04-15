@@ -3,7 +3,7 @@
 # from another domain/host. You may need to update allowedOrigins.
 ---
 description: Cors Http Handler
-enabled: true
+enabled: ${CORS_ENABLED:true}
 allowedOrigins:
 - http://localhost:8080
 allowedMethods:
