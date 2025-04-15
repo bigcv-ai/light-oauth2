@@ -2,7 +2,7 @@
 # from light-portal single page application which might served
 # from another domain/host. You may need to update allowedOrigins.
 ---
-enabled: true
+enabled: ${CORS_ENABLED:true}
 allowedOrigins:
 - http://localhost:8080
 allowedMethods:
