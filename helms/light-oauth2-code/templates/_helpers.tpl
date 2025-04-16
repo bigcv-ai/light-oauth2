@@ -60,3 +60,22 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Convert YAML config to environment variables
+*/}}
+{{- define "light-oauth2-code.configToEnv" -}}
+{{- $file := .Files.Get (printf "config/%s/%s" .Values.environment .) -}}
+{{- if $file -}}
+{{- $config := fromYaml $file -}}
+{{- range $key, $value := $config -}}
+{{- if kindIs "map" $value -}}
+{{- range $subkey, $subvalue := $value -}}
+{{- printf "%s_%s_%s: %s" (upper .) (upper $key) (upper $subkey) ($subvalue | quote) -}}
+{{- end -}}
+{{- else -}}
+{{- printf "%s_%s: %s" (upper .) (upper $key) ($value | quote) -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}

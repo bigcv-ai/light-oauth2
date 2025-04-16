@@ -12,7 +12,7 @@
 set -ex
 
 VERSION=$1
-IMAGE_NAME="networknt/oauth2-code"
+IMAGE_NAME="ghcr.io/bigcv-ai/light-oauth2-code"
 
 showHelp() {
     echo " "
