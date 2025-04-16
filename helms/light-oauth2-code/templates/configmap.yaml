@@ -1,0 +1,14 @@
+{{- if .Values.config.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "light-oauth2-code.fullname" . }}-config
+  labels:
+    {{- include "light-oauth2-code.labels" . | nindent 4 }}
+data:
+  {{- $env := .Values.environment }}
+  {{- range $file := .Values.config.files }}
+  {{ $file }}: |-
+    {{- $.Files.Get (printf "config/%s/%s" $env $file) | nindent 4 }}
+  {{- end }}
+{{- end }}
