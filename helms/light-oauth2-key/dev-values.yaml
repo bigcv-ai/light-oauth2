@@ -16,20 +16,20 @@ podLabels:
 
 service:
   type: ClusterIP
-  port: 6881
-  containerPort: 6881
+  port: 6886
+  containerPort: 6886
 
 livenessProbe:
   enabled: false
   httpGet:
     path: /server/info
-    port: 6881
+    port: 6886
     scheme: HTTPS
 readinessProbe:
   enabled: false
   httpGet:
     path: /server/info
-    port: 6881
+    port: 6886
     scheme: HTTPS
 
 #########################################################################
