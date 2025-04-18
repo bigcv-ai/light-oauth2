@@ -59,3 +59,6 @@ subjects:
   - kind: ServiceAccount
     name: light-oauth2-refresh-token
     namespace: default
+  - kind: ServiceAccount
+    name: light-oauth2-service
+    namespace: default
