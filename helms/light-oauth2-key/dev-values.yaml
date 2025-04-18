@@ -4,7 +4,7 @@ nameOverride: "light-oauth2-key"
 fullnameOverride: "light-oauth2-key"
 
 image:
-  repository: ghcr.io/bigcv-ai/light-oauth2-code
+  repository: ghcr.io/bigcv-ai/light-oauth2-key
   pullPolicy: IfNotPresent
   tag: "v4"
 
