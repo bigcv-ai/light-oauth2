@@ -1,0 +1,124 @@
+environment: dev
+
+nameOverride: "light-oauth2-user"
+fullnameOverride: "light-oauth2-user"
+
+image:
+  repository: ghcr.io/bigcv-ai/light-oauth2-user
+  pullPolicy: IfNotPresent
+  tag: "v4"
+
+imagePullSecrets:
+  - name: ghcr-login-secret
+
+podLabels:
+  app: light-oauth2
+
+service:
+  type: ClusterIP
+  port: 6881
+  containerPort: 6881
+
+livenessProbe:
+  enabled: false
+  httpGet:
+    path: /server/info
+    port: 6881
+    scheme: HTTPS
+readinessProbe:
+  enabled: false
+  httpGet:
+    path: /server/info
+    port: 6881
+    scheme: HTTPS
+
+#########################################################################
+# Mount configure files to "/config" folder inside application container.
+#########################################################################
+secrets:
+  enabled: true
+  mountPath: "/config"
+  files:
+    - cors.yml
+    - handler.yml
+    - hazelcast.xml
+    - logback.xml
+    - oauth_user.yml
+    - openapi-security.yml
+    - openapi-validator.yml
+    - openapi.yaml
+    - primary.crt
+    - secondary.crt
+    - secret.yml
+    - server.keystore
+    - server.truststore
+    - server.yml
+    - service.yml
+
+volumes:
+  - name: secret-volume
+    secret:
+      secretName: light-oauth2-user-secret
+
+volumeMounts:
+  - name: secret-volume
+    mountPath: "/config"
+
+############################
+# Configure ENV application 
+############################
+configMap:
+  name: "light-oauth2-user-config"
+  enable: true
+  values:
+    # SERVER
+    SERVER_IP: 0.0.0.0
+    SERVER_HTTP_PORT: 6885
+    SERVER_ENABLE_HTTP: false
+    SERVER_HTTPS_PORT: 6885
+    SERVER_ENABLE_HTTPS: true
+    SERVER_ENABLE_HTTP2: true
+    SERVER_KEYSTORE_NAME: server.keystore
+    SERVER_KEYSTORE_PASS: password
+    SERVER_KEY_PASS: password
+    SERVER_ENABLE_TWO_WAY_TLS: false
+    SERVER_TRUSTSTORE_NAME: server.truststore
+    SERVER_TRUSTSTORE_PASS: password
+    SERVER_SERVICE_ID: com.networknt.oauth2-user-1.0.0
+    SERVER_ENABLE_REGISTRY: false
+
+    # SECRET
+    SECRET_SERVER_KEYSTORE_PASS: password
+    SECRET_SERVER_KEY_PASS: password
+    SECRET_SERVER_TRUSTSTORE_PASS: password
+    SECRET_CLIENT_KEYSTORE_PASS: password
+    SECRET_CLIENT_KEY_PASS: password
+    SECRET_CLIENT_TRUSTSTORE_PASS: password
+    SECRET_AUTHORIZATION_CODE_CLIENT_SECRET: f6h1FTI8Q3-7UScPZDzfXA
+    SECRET_CLIENT_CREDENTIALS_CLIENT_SECRET: f6h1FTI8Q3-7UScPZDzfXA
+    SECRET_KEY_CLIENT_SECRET: f6h1FTI8Q3-7UScPZDzfXA
+    SECRET_EMAIL_PASSWORD: change-to-real-password
+    SECRET_JWT_PRIVATE_KEY_PASSWORD: password
+
+    # SECURITY
+    SECURITY_ENABLE_VERIFY_JWT: false
+    SECURITY_ENABLE_VERIFY_SCOPE: true
+    SECURITY_ENABLE_MOCK_JWT: false
+    SECURITY_JWT_CERTIFICATE_100: primary.crt
+    SECURITY_JWT_CERTIFICATE_101: secondary.crt
+    SECURITY_JWT_CLOCK_SKEW_IN_SECONDS: 60
+    SECURITY_LOG_JWT_TOKEN: true
+    SECURITY_LOG_CLIENT_USER_SCOPE: false
+    SECURITY_ENABLE_JWT_CACHE: true
+    SECURITY_BOOTSTRAP_FROM_KEY_SERVICE: false
+
+    # DB
+    DB_URL: jdbc:mysql://mysqldb:3306/oauth2?useSSL=false&disableMariaDbDriver
+    DB_USERNAME: mysqluser
+    DB_PASSWORD: mysqlpw
+    DB_MAXIMUM_POOL_SIZE: 2
+    DB_USE_SERVER_PREP_STMTS: true
+    DB_CACHE_PREP_STMTS: true
+    DB_CACHE_CALLABLE_STMTS: true
+    DB_PREP_STMT_CACHE_SIZE: 4096
+    DB_PREP_STMT_CACHE_SQL_LIMIT: 2048
