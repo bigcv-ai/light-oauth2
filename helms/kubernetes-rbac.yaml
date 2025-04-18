@@ -53,3 +53,6 @@ subjects:
   - kind: ServiceAccount
     name: light-oauth2-client
     namespace: default
+  - kind: ServiceAccount
+    name: light-oauth2-key
+    namespace: default
