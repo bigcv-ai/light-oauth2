@@ -1,32 +1,39 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql
+  name: mysqldb
 spec:
+  type: ClusterIP
   ports:
   - port: 3306
   selector:
-    app: mysql
-  clusterIP: None
+    app: mysqldb
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql
+  name: mysqldb
 spec:
   selector:
     matchLabels:
-      app: mysql
+      app: mysqldb
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: mysql
+        app: mysqldb
     spec:
       containers:
-      - image: mysql:5.6
+      - image: mysql:8
         name: mysql
+        resources:
+          limits:
+            memory: 512Mi
+            cpu: 256m
+          requests:
+            memory: 256Mi
+            cpu: 128m
         env:
         - name: MYSQL_ROOT_PASSWORD
           value: password

@@ -16,20 +16,20 @@ podLabels:
 
 service:
   type: ClusterIP
-  port: 6881
-  containerPort: 6881
+  port: 6885
+  containerPort: 6885
 
 livenessProbe:
   enabled: false
   httpGet:
     path: /server/info
-    port: 6881
+    port: 6885
     scheme: HTTPS
 readinessProbe:
   enabled: false
   httpGet:
     path: /server/info
-    port: 6881
+    port: 6885
     scheme: HTTPS
 
 #########################################################################
@@ -113,10 +113,10 @@ configMap:
     SECURITY_BOOTSTRAP_FROM_KEY_SERVICE: false
 
     # DB
-    DB_URL: jdbc:mysql://mysqldb:3306/oauth2?useSSL=false&disableMariaDbDriver
-    DB_USERNAME: mysqluser
-    DB_PASSWORD: mysqlpw
-    DB_MAXIMUM_POOL_SIZE: 2
+    DB_URL: jdbc:mysql://mysqldb:3306/oauth2?useSSL=false&disableMariaDbDriver&allowPublicKeyRetrieval=true
+    DB_USERNAME: root
+    DB_PASSWORD: password
+    # DB_MAXIMUM_POOL_SIZE: 2
     DB_USE_SERVER_PREP_STMTS: true
     DB_CACHE_PREP_STMTS: true
     DB_CACHE_CALLABLE_STMTS: true
