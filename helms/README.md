@@ -211,3 +211,30 @@ subjects:
     name: light-oauth2-token
     namespace: default
 ```
+
+
+helm install light-oauth2-client ./helms/light-oauth2-client -f ./helms/light-oauth2-client/dev-values.yaml
+helm install light-oauth2-key ./helms/light-oauth2-key -f ./helms/light-oauth2-key/dev-values.yaml
+helm install light-oauth2-refresh-token ./helms/light-oauth2-refresh-token -f ./helms/light-oauth2-refresh-token/dev-values.yaml
+helm install light-oauth2-service ./helms/light-oauth2-service -f ./helms/light-oauth2-service/dev-values.yaml
+helm install light-oauth2-token ./helms/light-oauth2-token -f ./helms/light-oauth2-token/dev-values.yaml
+helm install light-oauth2-user ./helms/light-oauth2-user -f ./helms/light-oauth2-user/dev-values.yaml
+helm install light-oauth2-code ./helms/light-oauth2-code -f ./helms/light-oauth2-code/dev-values.yaml
+
+helm uninstall light-oauth2-client
+helm uninstall light-oauth2-key
+helm uninstall light-oauth2-refresh-token
+helm uninstall light-oauth2-service
+helm uninstall light-oauth2-token
+helm uninstall light-oauth2-user
+helm uninstall light-oauth2-code
+
+
+curl -k -v -H 'Authorization: BASIC YWRtaW46MTIzNDU2' 'https://light-oauth2-code:6881/oauth2/code?response_type=code&client_id=f7d42348-c647-4efb-a52d-4c5787421e72&redirect_uri=http://localhost:8080/authorization'
+
+
+curl -k -H "Authorization: Basic f7d42348-c647-4efb-a52d-4c5787421e72:f6h1FTI8Q3-7UScPZDzfXA" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -X POST \
+  -d "grant_type=authorization_code&code=7tQTLoJaRUGvxF2B1MulIg&redirect_uri=http://localhost:8080/authorization" \
+  https://light-oauth2-token:6882/oauth2/token
