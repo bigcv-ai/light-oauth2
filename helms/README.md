@@ -15,6 +15,7 @@ Tài liệu này hướng dẫn cách triển khai ứng dụng Light-OAuth2 và
     - [3. Cập nhật deployment.yaml](#3-cập-nhật-deploymentyaml)
     - [4. Thiết lập RBAC](#4-thiết-lập-rbac)
   - [Ví dụ triển khai với Helm](#ví-dụ-triển-khai-với-helm)
+  - [Test](#test)
 
 ---
 
@@ -212,7 +213,9 @@ subjects:
     namespace: default
 ```
 
+## Test
 
+```sh
 helm install light-oauth2-client ./helms/light-oauth2-client -f ./helms/light-oauth2-client/dev-values.yaml
 helm install light-oauth2-key ./helms/light-oauth2-key -f ./helms/light-oauth2-key/dev-values.yaml
 helm install light-oauth2-refresh-token ./helms/light-oauth2-refresh-token -f ./helms/light-oauth2-refresh-token/dev-values.yaml
@@ -229,12 +232,23 @@ helm uninstall light-oauth2-token
 helm uninstall light-oauth2-user
 helm uninstall light-oauth2-code
 
-
+# Code service
 curl -k -v -H 'Authorization: BASIC YWRtaW46MTIzNDU2' 'https://light-oauth2-code:6881/oauth2/code?response_type=code&client_id=f7d42348-c647-4efb-a52d-4c5787421e72&redirect_uri=http://localhost:8080/authorization'
 
-
+# Token service
 curl -k -H "Authorization: Basic f7d42348-c647-4efb-a52d-4c5787421e72:f6h1FTI8Q3-7UScPZDzfXA" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -X POST \
-  -d "grant_type=authorization_code&code=7tQTLoJaRUGvxF2B1MulIg&redirect_uri=http://localhost:8080/authorization" \
+  -d "grant_type=authorization_code&code=W9XNzAnWSrCjuJCONLXL4A&redirect_uri=http://localhost:8080/authorization" \
   https://light-oauth2-token:6882/oauth2/token
+
+curl -k -H "Authorization: Basic f7d42348-c647-4efb-a52d-4c5787421e72:f6h1FTI8Q3-7UScPZDzfXA" -H "Content-Type: application/x-www-form-urlencoded" -X POST -d "grant_type=client_credentials" https://light-oauth2-token:6882/oauth2/token
+
+# Service service
+curl -k https://light-oauth2-service:6883/oauth2/service?page=0
+
+# User service
+curl -k -H "Content-Type: application/json" -X POST -d '{"userId":"stevehu","userType":"employee","firstName":"Steve","lastName":"Hu","email":"stevehu@gmail.com","password":"123456","passwordConfirm":"123456"}' https://light-oauth2-user:6885/oauth2/user
+
+curl -k https://light-oauth2-user:6885/oauth2/user/stevehu
+```
